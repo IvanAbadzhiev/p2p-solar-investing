@@ -30,7 +30,7 @@ contract SolarProjects {
         return (projectIds[id].name, projectIds[id].initialCoins);
     }
 
-    function getBalance() public pure returns(uint256) {
-        return 1;
+    function destroy() public onlyOwner {
+        selfdestruct(owner);
     }
 }

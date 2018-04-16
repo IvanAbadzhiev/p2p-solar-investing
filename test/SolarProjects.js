@@ -1,12 +1,26 @@
-var SolarProjects = artifacts.require("./SolarProjects.sol");
+const expectThrow = require('./expectThrow');
+const SolarProjects = artifacts.require("./SolarProjects.sol");
 
 contract('SolarProjects', function(accounts){
-	it("Should has one project", function(){
-		return SolarProjects.deployed().then(function(instance) {
-	      return instance.getBalance.call(accounts[0]);
-	    }).then(function(balance) {
-	    	console.log(balance);
-	      assert.equal(balance.valueOf(), 1, "10000 wasn't in the first account");
-	    });
+
+	it('Is create solar project works', async() => {
+		let id = 1;
+		let name = 'Ivan house';
+		let initialCoins = 100;
+		let instance = await SolarProjects.deployed();
+		instance.createNewProject(id,name,initialCoins);
+
+		let nameAndCoins = await instance.getProjectById(id);
+		
+		assert.equal(nameAndCoins[0], name);
+		assert.equal(nameAndCoins[1].toNumber(), initialCoins);
 	});
+
+	/*it('Test onlyOwner modifier', async(promise) => {
+		let account_one = accounts[0];
+		let account_two = accounts[1];
+	
+		let instance = await SolarProjects.deployed();
+		await expectThrow(instance.destroy( { from : account_two }));
+	});*/
 });
